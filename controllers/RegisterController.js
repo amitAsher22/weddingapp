@@ -1,10 +1,14 @@
-// import asyncHandler from "express-async-handler";
-import { validationResult } from "express-validator";
-import Users from "../model/UsersModel.js";
 import { registerServices } from "../services/register.services.js";
+import { validationResult } from "express-validator";
 
 const registerUser = async (req, res) => {
-  const result = await registerServices(req, res);
+  const { password, name, email } = req.body;
+  // validated the inputs
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.json({ errors: errors.array() });
+
+  const result = await registerServices(password, name, email);
+  console.log(result);
 };
 
 ///@ route    POST /register/login
