@@ -1,9 +1,8 @@
 // import asyncHandler from "express-async-handler";
 import { validationResult } from "express-validator";
 import Users from "../model/UsersModel.js";
-import { registerServices } from "../services/services.registerUser.js";
+import { registerServices } from "../services/register.services.js";
 
-///@ route    POST /register
 const registerUser = async (req, res) => {
   const result = await registerServices(req, res);
 };
