@@ -1,4 +1,5 @@
 import express from "express";
+import { ERROR_EMAIL } from "../errors/validationErrors.js";
 import { check } from "express-validator";
 import {
   registerUser,
@@ -11,7 +12,7 @@ const router = express.Router();
 router.post(
   "/",
   [
-    check("email", "Please provide avalid email").isEmail(),
+    check("email", ERROR_EMAIL).isEmail(),
     check(
       "password",
       "Please provide a password that is greater than 5 characters"
