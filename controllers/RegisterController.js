@@ -1,24 +1,32 @@
-import { registerServices } from "../services/register.services.js";
+import { registration, login } from "../services/authentication/auth.js";
+
 import { validationResult } from "express-validator";
 
 const registerUser = async (req, res) => {
-  const { password, name, email } = req.body;
-  // validated the inputs
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.json({ errors: errors.array() });
+  try {
+    const error = validationResult(req);
+    const { password, name, email } = req.body;
 
-  const result = await registerServices(password, name, email);
-  console.log(result);
+    const result = await registration(password, name, email);
+    if (error.errors.length > 0) {
+      return res.send(error.errors);
+    }
+    return res.send(result);
+  } catch (error) {
+    console.log("register error", error);
+  }
 };
 
-///@ route    POST /register/login
-const loginUser = async (req, res) => {
-  res.json({ message: "login" });
+//@ route    POST /login
+const loginUsers = async (req, res) => {
+  try {
+    const { name, password } = req.body;
+
+    const result = await login(name, password);
+    return res.send(result);
+  } catch (error) {
+    console.log("login error", error);
+  }
 };
 
-///@ route    GET /register/me
-const getMe = async (req, res) => {
-  res.json({ message: "User data display" });
-};
-
-export { registerUser, loginUser, getMe };
+export { registerUser, loginUsers };
