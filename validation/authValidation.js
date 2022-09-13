@@ -24,14 +24,14 @@ const passwordOptions = {
     options: { max: 10 },
   },
   isEmpty: {
-    negated: true,
+    negated: false,
     errorMessage: ERROR_EMPTY_PASSWORD,
   },
 };
 
 const nameOptions = {
   isEmpty: {
-    negated: true,
+    negated: false,
     errorMessage: ERROR_NAME,
   },
 };
