@@ -3,13 +3,18 @@ import loginModel from "../../model/loginModel.js";
 
 ///@ route    POST /register
 const registration = async (password, name, email) => {
-  const setUsers = await Users.create({
-    name: name,
-    email: email,
-    password: password,
-  });
-
-  return setUsers;
+  /** Checking if the user exists into MongoDB */
+  const getAllUsers = await Users.find({ email });
+  if (getAllUsers.length === 0) {
+    const createuser = await Users.create({
+      name: name,
+      email: email,
+      password: password,
+    });
+    return "create users";
+  } else {
+    return "axist alrady";
+  }
 };
 
 const login = async (name, password) => {

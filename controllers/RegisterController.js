@@ -11,7 +11,8 @@ const registerUser = async (req, res) => {
     if (error.errors.length > 0) {
       return res.send(error.errors);
     }
-    return res.send(result);
+    res.json({ result });
+    // return res.send(result);
   } catch (error) {
     console.log("register error", error);
   }
@@ -24,7 +25,7 @@ const loginUsers = async (req, res) => {
     const { name, password } = req.body;
     const result = await login(name, password);
 
-    if (error.errors > 0) {
+    if (error.errors.length > 0) {
       return res.send(error.errors);
     }
     return res.send(result);
