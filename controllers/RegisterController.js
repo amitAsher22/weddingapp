@@ -1,6 +1,6 @@
 import { registration, login } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
-
+import Jwt from "jsonwebtoken";
 /**
  *  * ROTER - POST - http://localhost:8000/register
  * A function that takes 3 parameters from the req.body and performs validation according to the conditions I decided (express-validator)
@@ -14,13 +14,27 @@ const registerUser = async (req, res) => {
   try {
     const error = validationResult(req);
     const { password, name, email } = req.body;
+    const token = await Jwt.sign(
+      {
+        name,
+        password,
+        email,
+      },
+      "fdfdfsdfsdfsdfdfdsfsdfsd",
+      {
+        expiresIn: 36000,
+      }
+    );
     const result = await registration(password, name, email);
 
     if (error.errors.length > 0) {
       return res.send(error.errors);
     }
+
     res.json({ result });
     // return res.send(result);
+
+    console.log(token);
   } catch (error) {
     console.log("register error", error);
   }
@@ -43,6 +57,7 @@ const loginUsers = async (req, res) => {
     if (error.errors.length > 0) {
       return res.send(error.errors);
     }
+
     return res.send(result);
   } catch (error) {
     console.log("login error", error);

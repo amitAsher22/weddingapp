@@ -1,5 +1,6 @@
 import Users from "../../model/UsersModel.js";
 import loginModel from "../../model/loginModel.js";
+import bcrypt from "bcrypt";
 
 /**
  * ROTER - POST - http://localhost:8000/register
@@ -31,9 +32,10 @@ const registration = async (password, name, email) => {
  *
  */
 const login = async (name, password) => {
+  const bcryptPasword = await bcrypt.hash(password, 10);
   const resultLogin = await loginModel.create({
     name,
-    password,
+    password: bcryptPasword,
   });
 
   return resultLogin;
