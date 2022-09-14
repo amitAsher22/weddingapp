@@ -1,7 +1,15 @@
 import { registration, login } from "../services/authentication/auth.js";
-
 import { validationResult } from "express-validator";
 
+/**
+ *  * ROTER - POST - http://localhost:8000/register
+ * A function that takes 3 parameters from the req.body and performs validation according to the conditions I decided (express-validator)
+ * Sending the mongodb parameters (registration )
+ * @param {string} name
+ * @param {string} password
+ * @param {string} email
+ * @returns
+ */
 const registerUser = async (req, res) => {
   try {
     const error = validationResult(req);
@@ -18,7 +26,14 @@ const registerUser = async (req, res) => {
   }
 };
 
-//@ route    POST /login
+/**
+ * * * ROTER - POST - http://localhost:8000/login/login
+ * A function that takes 3 parameters from the req.body and performs validation according to the conditions I decided (express-validator)
+ *  * Sending the mongodb parameters (login )
+ * @param {string} name
+ * @param {string} password
+ * @returns
+ */
 const loginUsers = async (req, res) => {
   try {
     const error = validationResult(req);
