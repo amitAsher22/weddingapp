@@ -17,7 +17,10 @@ const registerUser = async (req, res) => {
 
     const { password, name, email } = req.body;
     const result = await registration(password, name, email);
-    res.cookie("jwt", result);
+    res.cookie("token", result, {
+      httpOnly: true,
+    });
+
     res.json({ token: result });
 
     // return res.send(result);

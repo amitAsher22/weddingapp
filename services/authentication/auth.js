@@ -2,6 +2,7 @@ import Users from "../../model/UsersModel.js";
 import loginModel from "../../model/loginModel.js";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
+
 /**
  * ROTER - POST - http://localhost:8000/register
  * A function receives 3 parameters and checks if the user exists in the database and if not it is created in Mongo
@@ -71,10 +72,10 @@ const crreateUserLogin = async (name, bcryptPasword) => {
 };
 
 const createToken = async (id) => {
-  const maxAge = 3 * 24 * 60 * 60;
-  const signJWT = await Jwt.sign({ id }, "secret", {
-    expiresIn: maxAge,
+  const signJWT = await Jwt.sign({ id }, process.env.MY_SECRET, {
+    expiresIn: "1h",
   });
+
   return signJWT;
 };
 
