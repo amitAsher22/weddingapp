@@ -16,7 +16,7 @@ const registration = async (password, name, email) => {
   const getuserByEmail = await Users.find({ email });
   if (getuserByEmail.length === 0) {
     const user = await createUsersRegister(bcryptPasword, name, email);
-    const token = await createToken(user._id);
+    const token = await createToken(user);
     return token;
   } else {
     return "axist alrady";
@@ -75,8 +75,25 @@ const createToken = async (id) => {
   const signJWT = await Jwt.sign({ id }, process.env.MY_SECRET, {
     expiresIn: "1h",
   });
-
   return signJWT;
 };
 
-export { registration, login };
+const checkUser = async (resultToken) => {
+  if (resultToken) {
+    Jwt.verify(
+      resultToken,
+      process.env.MY_SECRET,
+      async (err, decodedToken) => {
+        if (err) {
+          console.log(err.message);
+        } else {
+          // console.log(decodedToken);
+          const user = await Users.findById(decodedToken.id);
+          console.log(user, "user from services");
+        }
+      }
+    );
+  }
+};
+
+export { registration, login, checkUser };

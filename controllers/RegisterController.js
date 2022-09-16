@@ -1,5 +1,6 @@
 import { registration, login } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
+import { checkUser } from "../services/authentication/auth.js";
 
 /**
  *  * ROTER - POST - http://localhost:8000/register
@@ -17,9 +18,7 @@ const registerUser = async (req, res) => {
 
     const { password, name, email } = req.body;
     const result = await registration(password, name, email);
-    res.cookie("token", result, {
-      httpOnly: true,
-    });
+    await checkUser(result);
 
     res.json({ token: result });
 
