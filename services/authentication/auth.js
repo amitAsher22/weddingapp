@@ -14,12 +14,14 @@ import Jwt from "jsonwebtoken";
 const registration = async (password, name, email) => {
   const bcryptPasword = await bcrypt.hash(password, 10);
   const getuserByEmail = await Users.find({ email });
-  if (getuserByEmail.length === 0) {
+  if (getuserByEmail.length <= 0) {
     const user = await createUsersRegister(bcryptPasword, name, email);
     const token = await createToken(user);
-    return token;
-  } else {
-    return "axist alrady";
+    return "registration succeeded !";
+  }
+
+  if (getuserByEmail.length === 1) {
+    return "The user exists in the system";
   }
 };
 

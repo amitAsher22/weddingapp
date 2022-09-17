@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
       res.send(error.errors);
     } else {
       const result = await registration(password, name, email);
-      res.json({ token: result });
+      res.json({ message: result });
     }
     // return res.send(result);
   } catch (error) {
