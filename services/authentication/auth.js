@@ -29,9 +29,9 @@ const registration = async (password, name, email) => {
  * @param {string} name
  * @param {string} password
  */
-const login = async (name, password) => {
+const login = async (email, password) => {
   const bcryptPasword = await bcrypt.hash(password, 10);
-  const resultLogin = crreateUserLogin(name, bcryptPasword);
+  const resultLogin = crreateUserLogin(email, bcryptPasword);
   return resultLogin;
 };
 
@@ -59,10 +59,10 @@ const createUsersRegister = async (bcryptPasword, name, email) => {
  * @param {string} bcryptPasword
  * @param {string} name
  */
-const crreateUserLogin = async (name, bcryptPasword) => {
+const crreateUserLogin = async (email, bcryptPasword) => {
   try {
     const resultLogin = await loginModel.create({
-      name,
+      email,
       password: bcryptPasword,
     });
     return resultLogin;
@@ -71,29 +71,11 @@ const crreateUserLogin = async (name, bcryptPasword) => {
   }
 };
 
-const createToken = async (id) => {
-  const signJWT = await Jwt.sign({ id }, process.env.MY_SECRET, {
+const createToken = async (user) => {
+  const signJWT = await Jwt.sign({ user }, process.env.MY_SECRET, {
     expiresIn: "1h",
   });
   return signJWT;
 };
 
-const checkUser = async (resultToken) => {
-  if (resultToken) {
-    Jwt.verify(
-      resultToken,
-      process.env.MY_SECRET,
-      async (err, decodedToken) => {
-        if (err) {
-          console.log(err.message);
-        } else {
-          // console.log(decodedToken);
-          const user = await Users.findById(decodedToken.id);
-          console.log(user, "user from services");
-        }
-      }
-    );
-  }
-};
-
-export { registration, login, checkUser };
+export { registration, login };

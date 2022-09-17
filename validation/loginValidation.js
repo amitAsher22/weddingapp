@@ -1,15 +1,19 @@
 import { checkSchema } from "express-validator";
 
 import {
-  ERROR_NAME_VALID_LOGIN,
+  ERROR_EMAIL_VALID_LOGIN,
   ERROR_NAME_VALID_PASSWORD,
   ERROR_LENGTH_PASSWORD,
+  ERROR_VALID_EMAIL_LOGIN,
 } from "../errorsMessages/validationErrors.js";
 
-const nameOpation = {
+const emailOpation = {
   isEmpty: {
     negated: true,
-    errorMessage: ERROR_NAME_VALID_LOGIN,
+    errorMessage: ERROR_EMAIL_VALID_LOGIN,
+  },
+  isEmail: {
+    errorMessage: ERROR_VALID_EMAIL_LOGIN,
   },
 };
 
@@ -25,6 +29,6 @@ const passwordOpation = {
 };
 
 export const loginUserValidation = checkSchema({
-  name: nameOpation,
+  email: emailOpation,
   password: passwordOpation,
 });

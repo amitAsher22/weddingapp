@@ -1,6 +1,5 @@
 import { registration, login } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
-import { checkUser } from "../services/authentication/auth.js";
 
 /**
  *  * ROTER - POST - http://localhost:8000/register
@@ -14,14 +13,13 @@ import { checkUser } from "../services/authentication/auth.js";
 const registerUser = async (req, res) => {
   try {
     const error = validationResult(req);
-    if (error.errors.length > 0) return res.send(error.errors);
-
     const { password, name, email } = req.body;
-    const result = await registration(password, name, email);
-    await checkUser(result);
-
-    res.json({ token: result });
-
+    if (error.errors.length > 0) {
+      res.send(error.errors);
+    } else {
+      const result = await registration(password, name, email);
+      res.json({ token: result });
+    }
     // return res.send(result);
   } catch (error) {
     console.log("register error", error);
@@ -39,14 +37,13 @@ const registerUser = async (req, res) => {
 const loginUsers = async (req, res) => {
   try {
     const error = validationResult(req);
-    const { name, password } = req.body;
-    const result = await login(name, password);
-
+    const { email, password } = req.body;
     if (error.errors.length > 0) {
       return res.send(error.errors);
+    } else {
+      const result = await login(email, password);
+      return res.send(result);
     }
-
-    return res.send(result);
   } catch (error) {
     console.log("login error", error);
   }
