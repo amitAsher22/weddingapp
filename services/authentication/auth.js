@@ -17,11 +17,10 @@ const registration = async (password, name, email) => {
   if (getuserByEmail.length <= 0) {
     const user = await createUsersRegister(bcryptPasword, name, email);
     const token = await createToken(user);
-    return "registration succeeded !";
+    return [{ msg: "registration succeeded !" }];
   }
-
   if (getuserByEmail.length === 1) {
-    return "The user exists in the system";
+    return [{ msg: "The user exists in the system!" }];
   }
 };
 

@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
     const error = validationResult(req);
     const { password, name, email } = req.body;
     if (error.errors.length > 0) {
-      res.send(error.errors);
+      res.json({ message: error.errors });
     } else {
       const result = await registration(password, name, email);
       res.json({ message: result });
