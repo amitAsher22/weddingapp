@@ -1,6 +1,7 @@
 import express from "express";
-import router from "./Router/registerUserRouter.js";
-import connectDB from "./configDB/connectDB.js";
+import registrationRouter from "./Router/registerUserRouter";
+import userRouter from "./Router/userRouter";
+import connectDB from "./configDB/connectDB";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -20,8 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/register", router);
-app.use("/login", router);
+app.use("/", registrationRouter);
+app.use("/users", userRouter);
 
 app.listen(port, () => {
   console.log(`my server running ${port}`);
