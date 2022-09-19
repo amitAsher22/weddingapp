@@ -1,11 +1,9 @@
 import express from "express";
-import { authValidation } from "../validation/authValidation.js";
-import { loginUserValidation } from "../validation/loginValidation.js";
-import { registerUser, loginUsers } from "../controllers/RegisterController.js";
+import { registerUser, login } from "../controllers/AuthController";
 
 const routers = express.Router();
 
-routers.post("/", authValidation, registerUser);
-routers.post("/login", loginUserValidation, loginUsers);
+routers.post("/register", registerUser);
+routers.post("/login", login);
 
 export default routers;
