@@ -5,7 +5,7 @@ import { registerUser, loginUsers } from "../controllers/RegisterController.js";
 
 const routers = express.Router();
 
-routers.post("/", authValidation, registerUser);
+routers.post("/register", authValidation, registerUser);
 routers.post("/login", loginUserValidation, loginUsers);
 
 export default routers;

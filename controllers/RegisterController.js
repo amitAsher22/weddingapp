@@ -1,4 +1,7 @@
-import { registration, login } from "../services/authentication/auth.js";
+import {
+  registrationServices,
+  login,
+} from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
 
 /**
@@ -14,15 +17,16 @@ const registerUser = async (req, res) => {
   try {
     const error = validationResult(req);
     const { password, name, email } = req.body;
-    if (error.errors.length > 0) {
-      res.json({ message: error.errors });
-    } else {
-      const result = await registration(password, name, email);
-      res.json({ message: result });
-    }
-    // return res.send(result);
+    const resultFromServices = await registrationServices(
+      password,
+      name,
+      email,
+      error
+    );
+
+    res.json({ result: resultFromServices });
   } catch (error) {
-    console.log("register error", error);
+    res.json({ "register error": error });
   }
 };
 
@@ -35,18 +39,13 @@ const registerUser = async (req, res) => {
  * @returns
  */
 const loginUsers = async (req, res) => {
-  try {
-    const error = validationResult(req);
-    const { email, password } = req.body;
-    if (error.errors.length > 0) {
-      return res.send(error.errors);
-    } else {
-      const result = await login(email, password);
-      return res.send(result);
-    }
-  } catch (error) {
-    console.log("login error", error);
+  const error = validationResult(req);
+  if (error.errors.length > 0) {
+    return res.json({ error });
   }
+  const { email, password } = req.body;
+  const result = await login(email, password);
+  // res.json({ result });
 };
 
 export { registerUser, loginUsers };
