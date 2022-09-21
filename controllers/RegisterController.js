@@ -3,6 +3,8 @@ import {
   login,
 } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
+import { createToken } from "../services/authentication/auth.js";
+import jwt from "jsonwebtoken";
 
 /**
  *  * ROTER - POST - http://localhost:8000/register
@@ -39,13 +41,38 @@ const registerUser = async (req, res) => {
  * @returns
  */
 const loginUsers = async (req, res) => {
+  const { email, password } = req.body;
   const error = validationResult(req);
   if (error.errors.length > 0) {
     return res.json({ error });
   }
-  const { email, password } = req.body;
   const result = await login(email, password);
-  // res.json({ result });
+
+  res.cookie("jwt", result, {
+    withCrdentials: true,
+    httpOnly: false,
+  });
+
+  res.json({ result });
 };
 
-export { registerUser, loginUsers };
+const verifyJWT = async (req, res) => {
+  const { email, password } = req.body;
+  const setToken = await createToken(email, password);
+  if (!setToken) {
+    res.json({
+      message: "you we need token , please give it us next time",
+    });
+  } else {
+    jwt.verify(setToken, "jwtSecret", (err, decoded) => {
+      if (err) {
+        res.json({ message: "U faild to auth" });
+      } else {
+        req.userId = decoded.id;
+        next();
+      }
+    });
+  }
+};
+
+export { registerUser, loginUsers, verifyJWT };

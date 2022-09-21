@@ -22,6 +22,7 @@ app.use(cors());
 
 app.use("/register", router);
 app.use("/login", router);
+app.use("/verify", router);
 
 app.listen(port, () => {
   console.log(`my server running ${port}`);
