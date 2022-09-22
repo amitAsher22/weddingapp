@@ -32,9 +32,9 @@ const createUsersRegister = async (bcryptPasword, name, email) => {
   if (!user || user.length <= 0) {
     const user = await createUsersRegister(bcryptPasword, name, email);
     const token = createToken(user);
-    user.token = token;
-    console.log("token", token);
-    return user;
+    const userAndToken = {...user._doc, token};
+    console.log("userAndToken", userAndToken);
+    return userAndToken;
   }  
 };
 
@@ -57,7 +57,7 @@ const registerUser = async (req, res, next) => {
     } else {
       const { password, name, email } = req.body;
       const user = await registration(password, name, email, next);
-      return res.status(201).json({ user });
+      return res.status(201).json(user);
     }
   } catch (error) {
     console.log("register error", error);
@@ -91,8 +91,8 @@ const createToken = (user) => {
     if (comparison) {
       const token = createToken(user);
       console.log("login-token", token);
-      const userAndToken = {...user, token};
-      return res.status(200).json({ user: userAndToken });   
+      const userAndToken = {...user._doc, token};
+      return res.status(200).json(userAndToken);   
     }
     return res.status(400).json({ message: "failed to login!" });   
   } catch (e) {
