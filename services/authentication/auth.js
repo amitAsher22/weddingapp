@@ -38,8 +38,8 @@ const registrationServices = async (password, name, email, error) => {
   }
 };
 
-const createToken = async (id) => {
-  return jwt.sign({ id }, process.env.MY_SECRET, { expiresIn: "1h" });
+const createToken = async (user) => {
+  return jwt.sign({ user }, process.env.MY_SECRET, { expiresIn: "1h" });
 };
 /**
  * * ROTER - POST - http://localhost:8000/login/login
@@ -50,13 +50,8 @@ const createToken = async (id) => {
 const login = async (email, password) => {
   try {
     const user = await Users.find({ email });
-    const token = createToken(user._id);
+    const token = createToken(user);
     return token;
-    // res.cookie("jwt", token, {
-    //   withCrdentials: true,
-    //   httpOnly: false,
-    // });
-    // res.status(201).json({ user: user._id });
   } catch (error) {
     console.log(error);
   }

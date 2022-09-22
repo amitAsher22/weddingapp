@@ -3,8 +3,6 @@ import {
   login,
 } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
-import { createToken } from "../services/authentication/auth.js";
-import jwt from "jsonwebtoken";
 
 /**
  *  * ROTER - POST - http://localhost:8000/register
@@ -47,32 +45,27 @@ const loginUsers = async (req, res) => {
     return res.json({ error });
   }
   const result = await login(email, password);
-
-  res.cookie("jwt", result, {
-    withCrdentials: true,
-    httpOnly: false,
-  });
-
+  console.log(result);
   res.json({ result });
 };
 
-const verifyJWT = async (req, res) => {
-  const { email, password } = req.body;
-  const setToken = await createToken(email, password);
-  if (!setToken) {
-    res.json({
-      message: "you we need token , please give it us next time",
-    });
-  } else {
-    jwt.verify(setToken, "jwtSecret", (err, decoded) => {
-      if (err) {
-        res.json({ message: "U faild to auth" });
-      } else {
-        req.userId = decoded.id;
-        next();
-      }
-    });
-  }
-};
+// const verifyJWT = async (req, res) => {
+//   const { email, password } = req.body;
+//   const setToken = await createToken(email, password);
+//   if (!setToken) {
+//     res.json({
+//       message: "you we need token , please give it us next time",
+//     });
+//   } else {
+//     jwt.verify(setToken, "jwtSecret", (err, decoded) => {
+//       if (err) {
+//         res.json({ message: "U faild to auth" });
+//       } else {
+//         req.userId = decoded.id;
+//         next();
+//       }
+//     });
+//   }
+// };
 
-export { registerUser, loginUsers, verifyJWT };
+export { registerUser, loginUsers };
