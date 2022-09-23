@@ -49,23 +49,15 @@ const createToken = async (user) => {
 const login = async (email, password) => {
   try {
     const user = await Users.find({ email });
-    const token = createToken(user);
+    const token = await createToken(user);
+    const verify = await verifyToken(token, user);
     return token;
   } catch (error) {
     console.log(error);
   }
 };
 
-// const createUserLogin = async (email, bcryptPasword) => {
-//   try {
-//     const resultLogin = await loginModel.create({
-//       email,
-//       password: bcryptPasword,
-//     });
-//     return resultLogin;
-//   } catch (error) {
-//     return "error , user log in not created , try again", error;
-//   }
-// };
-
+const verifyToken = async (token, user) => {
+  return jwt.verify(token, process.env.MY_SECRET);
+};
 export { registrationServices, login };
