@@ -1,5 +1,4 @@
 import Users from "../../model/UsersModel.js";
-import loginModel from "../../model/loginModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -69,4 +68,4 @@ const login = async (email, password) => {
 //   }
 // };
 
-export { registrationServices, login, createToken };
+export { registrationServices, login };
