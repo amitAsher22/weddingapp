@@ -45,8 +45,7 @@ const loginUsers = async (req, res) => {
   }
   const { email, password } = req.body;
   const result = await login(email, password);
-  console.log(result);
-  res.json({ result });
+  return res.json({ result });
 };
 
 // const verifyJWT = async (req, res) => {

@@ -1,6 +1,7 @@
 import Users from "../../model/UsersModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import checkAuth from "./CheckAuth.js";
 
 const createUsersRegister = async (bcryptPasword, name, email) => {
   try {
@@ -50,8 +51,9 @@ const login = async (email, password) => {
   try {
     const user = await Users.find({ email });
     const token = await createToken(user);
-    const verify = await verifyToken(token, user);
-    return token;
+    checkAuth();
+    // const verify = await verifyToken(token, user);
+    return { token: token };
   } catch (error) {
     console.log(error);
   }
@@ -60,4 +62,4 @@ const login = async (email, password) => {
 const verifyToken = async (token, user) => {
   return jwt.verify(token, process.env.MY_SECRET);
 };
-export { registrationServices, login };
+export { registrationServices, login, verifyToken };
