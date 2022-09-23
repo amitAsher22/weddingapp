@@ -39,11 +39,11 @@ const registerUser = async (req, res) => {
  * @returns
  */
 const loginUsers = async (req, res) => {
-  const { email, password } = req.body;
   const error = validationResult(req);
   if (error.errors.length > 0) {
     return res.json({ error });
   }
+  const { email, password } = req.body;
   const result = await login(email, password);
   console.log(result);
   res.json({ result });
