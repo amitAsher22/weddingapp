@@ -1,7 +1,6 @@
 import Users from "../../model/UsersModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import checkAuth from "./CheckAuth.js";
 
 const createUsersRegister = async (bcryptPasword, name, email) => {
   try {
@@ -51,9 +50,7 @@ const login = async (email, password) => {
   try {
     const user = await Users.find({ email });
     const token = await createToken(user);
-    checkAuth();
-    // const verify = await verifyToken(token, user);
-    return { token: token };
+    return { token: token, user: user };
   } catch (error) {
     console.log(error);
   }
