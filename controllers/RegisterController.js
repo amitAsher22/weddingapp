@@ -49,21 +49,23 @@ const loginUsers = async (req, res) => {
   return res.json({ result });
 };
 
+const testUser = async (req, res) => {
+  console.log("get into usertest!!!!!!!!");
+  res.send("test work");
+};
+
 const verify = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers["x-access-token"];
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.MY_SECRET_TOKEN, (err, user) => {
-      if (err) {
-        return res.status(403).json("token is not valid");
-      }
-
-      req.user = user;
-      next();
-    });
+    if (!token) {
+      return res.status(403).send({ message: "No token provided!" });
+    }
+    jwt.verify(token, process.env.MY_SECRET_TOKEN);
+    next();
   } else {
     res.status(401).json("you are not authenticated!");
   }
 };
 
-export { registerUser, loginUsers, verify };
+export { registerUser, loginUsers, verify, testUser };
