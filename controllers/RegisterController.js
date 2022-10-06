@@ -3,6 +3,7 @@ import {
   login,
 } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 
 /**
  *  * ROTER - POST - http://localhost:8000/register
@@ -48,23 +49,21 @@ const loginUsers = async (req, res) => {
   return res.json({ result });
 };
 
-// const verifyJWT = async (req, res) => {
-//   const { email, password } = req.body;
-//   const setToken = await createToken(email, password);
-//   if (!setToken) {
-//     res.json({
-//       message: "you we need token , please give it us next time",
-//     });
-//   } else {
-//     jwt.verify(setToken, "jwtSecret", (err, decoded) => {
-//       if (err) {
-//         res.json({ message: "U faild to auth" });
-//       } else {
-//         req.userId = decoded.id;
-//         next();
-//       }
-//     });
-//   }
-// };
+const verify = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.MY_SECRET_TOKEN, (err, user) => {
+      if (err) {
+        return res.status(403).json("token is not valid");
+      }
 
-export { registerUser, loginUsers };
+      req.user = user;
+      next();
+    });
+  } else {
+    res.status(401).json("you are not authenticated!");
+  }
+};
+
+export { registerUser, loginUsers, verify };

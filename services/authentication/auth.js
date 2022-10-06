@@ -1,6 +1,7 @@
 import Users from "../../model/UsersModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { response } from "express";
 
 const createUsersRegister = async (bcryptPasword, name, email) => {
   try {
@@ -27,8 +28,10 @@ const createUsersRegister = async (bcryptPasword, name, email) => {
 const registrationServices = async (password, name, email, error) => {
   const bcryptPasword = await bcrypt.hash(password, 10);
   const user = await Users.find({ email });
+
   if (user.length == []) {
     const user = await createUsersRegister(bcryptPasword, name, email);
+
     return "register success";
   } else if (error.errors.length > 0) {
     return error;
@@ -37,9 +40,6 @@ const registrationServices = async (password, name, email, error) => {
   }
 };
 
-const createToken = async (user) => {
-  return jwt.sign({ user }, process.env.MY_SECRET, { expiresIn: "1h" });
-};
 /**
  * * ROTER - POST - http://localhost:8000/login/login
  * Creates and saves into mongoDB
@@ -49,14 +49,19 @@ const createToken = async (user) => {
 const login = async (email, password) => {
   try {
     const user = await Users.find({ email });
-    const token = await createToken(user);
-    return { token: token, user: user };
+    if (user.length > 0) {
+      const token = await createToken(user);
+      return { user: user, token };
+    } else {
+      return { messageError: "not found user" };
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-const verifyToken = async (token, user) => {
-  return jwt.verify(token, process.env.MY_SECRET);
+const createToken = async (user) => {
+  return jwt.sign({ user }, process.env.MY_SECRET_TOKEN, { expiresIn: "1h" });
 };
-export { registrationServices, login, verifyToken };
+
+export { registrationServices, login };

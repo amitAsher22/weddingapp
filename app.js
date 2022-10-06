@@ -7,13 +7,10 @@ import cors from "cors";
 
 dotenv.config();
 
-/**
- * connect to MongoDB
- */
 connectDB();
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
