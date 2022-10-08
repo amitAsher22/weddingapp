@@ -3,7 +3,6 @@ import {
   login,
 } from "../services/authentication/auth.js";
 import { validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
 
 /**
  *  * ROTER - POST - http://localhost:8000/register
@@ -46,26 +45,13 @@ const loginUsers = async (req, res) => {
   }
   const { email, password } = req.body;
   const result = await login(email, password);
-  return res.json({ result });
+  return res
+    .cookie("access_token", process.env.MY_SECRET_TOKEN, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    })
+    .status(200)
+    .json({ message: "Logged in successfully 😊 👌" });
 };
 
-const testUser = async (req, res) => {
-  console.log("get into usertest!!!!!!!!");
-  res.send("test work");
-};
-
-const verify = (req, res, next) => {
-  const authHeader = req.headers["x-access-token"];
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    if (!token) {
-      return res.status(403).send({ message: "No token provided!" });
-    }
-    jwt.verify(token, process.env.MY_SECRET_TOKEN);
-    next();
-  } else {
-    res.status(401).json("you are not authenticated!");
-  }
-};
-
-export { registerUser, loginUsers, verify, testUser };
+export { registerUser, loginUsers };

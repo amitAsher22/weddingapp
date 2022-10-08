@@ -1,7 +1,6 @@
 import Users from "../../model/UsersModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { response } from "express";
 
 const createUsersRegister = async (bcryptPasword, name, email) => {
   try {
@@ -31,12 +30,11 @@ const registrationServices = async (password, name, email, error) => {
 
   if (user.length == []) {
     const user = await createUsersRegister(bcryptPasword, name, email);
-
-    return "register success";
+    return { user: user, Msgsuccessful: "successful" };
   } else if (error.errors.length > 0) {
     return error;
   } else if (user.length > 0) {
-    return "The user exists in the system";
+    return { errorMsg: "The user exists in the system" };
   }
 };
 
@@ -51,7 +49,7 @@ const login = async (email, password) => {
     const user = await Users.find({ email });
     if (user.length > 0) {
       const token = await createToken(user);
-      return { user: user, token };
+      return { user: user, token, message: "register success" };
     } else {
       return { messageError: "not found user" };
     }

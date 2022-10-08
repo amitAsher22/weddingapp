@@ -10,16 +10,19 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(
+  cookieParser({
+    name: "sessiontwo",
+    keys: ["key1", "key2"],
+  })
+);
 const port = process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(cors());
 
-app.use("/register", router);
-app.use("/login", router);
-app.use("/test", router);
+app.use("/", router);
 
 app.listen(port, () => {
   console.log(`my server running ${port}`);
