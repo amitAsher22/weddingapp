@@ -1,4 +1,3 @@
-import { body } from "express-validator";
 import EventCard from "../../model/eventCardModel.js";
 
 const eventCardServices = async (
@@ -60,10 +59,20 @@ const CardByCategory = async (category) => {
   }
 };
 
+const getLikesCards = async (likes) => {
+  try {
+    const getLikesCards = await EventCard.find({ likes });
+    return getLikesCards;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   eventCardServices,
   getCardEvent,
   updateEventCard,
   deleteCard,
   CardByCategory,
+  getLikesCards,
 };

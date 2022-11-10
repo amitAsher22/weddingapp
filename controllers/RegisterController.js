@@ -45,13 +45,7 @@ const loginUsers = async (req, res) => {
   }
   const { email, password } = req.body;
   const result = await login(email, password);
-  return res
-    .cookie("access_token", process.env.MY_SECRET_TOKEN, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-    })
-    .status(200)
-    .json({ message: "Logged in successfully 😊 👌" });
+  console.log(result);
 };
 
 export { registerUser, loginUsers };

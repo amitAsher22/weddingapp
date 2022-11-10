@@ -39,10 +39,17 @@ const getCardByCategory = async (req, res) => {
   res.json(result);
 };
 
+const getCardsByLikes = async (req, res) => {
+  const likes = req.query.likes;
+  const result = await eventServices.getLikesCards(likes);
+  res.json(result);
+};
+
 export default {
   createEventCard,
   getCards,
   updateEventCard,
   deleteCard,
   getCardByCategory,
+  getCardsByLikes,
 };
