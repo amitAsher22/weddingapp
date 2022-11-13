@@ -5,7 +5,7 @@ const connectdb = async () => {
   mongoose.connect(url);
   const connection = mongoose.connection;
   connection.once("open", () => {
-    console.log("mongoDB DataBase connection :)");
+    console.log("mongoDB DataBase connection");
   });
 };
 
